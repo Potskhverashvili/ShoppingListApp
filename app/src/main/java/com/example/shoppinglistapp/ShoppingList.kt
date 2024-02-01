@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,77 +31,41 @@ data class ShoppingItem(
     val id: Int,
     var name: String,
     var quantity: Int,
-    var isEditing: Boolean = false,
+    var isEditing: Boolean,
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingListApp() {
-
-    var sItems by remember { mutableStateOf(listOf<ShoppingItem>()) }
+    val sItems by remember { mutableStateOf(listOf<ShoppingItem>()) }
     var showDialog by remember { mutableStateOf(false) }
-    var itemName by remember { mutableStateOf("") }
+    var itemName: String by remember { mutableStateOf("") }
     var itemQuantity by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
-        // -------------------------  Button ----------------------------------
         Button(
-            onClick = {
-                showDialog = true
-            },
+            onClick = { showDialog = true },
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
-            Text("Add Item")
+            Text(text = "add Item")
         }
-
-        // ------------------------- Lazy Column --------------------------------
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            items(sItems) {
-               ShoppingListItem(it,  {}, {})
-            }
+            items(sItems) { }
         }
     }
 
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            // add Button
-            confirmButton = {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-
-                    // ---------------- add Button -----------------
-                    Button(onClick = {
-                        var newItem = ShoppingItem(
-                            id = sItems.size + 1,
-                            name = itemName,
-                            quantity = itemQuantity.toInt(),
-                        )
-                        sItems += newItem
-                        showDialog = false
-                        itemName = ""
-
-                    }) {
-                        Text("add")
-                    }
-
-                    // --------------- Cancel Button ---------------------
-                    Button(onClick = { showDialog = false }) {
-                        Text("Cancel")
-                    }
-                }
-            },
-            title = { Text("Add Shopping Item") },
+            confirmButton = { /*TODO*/ },
+            title = { Text(text = "Add Shopping Item") },
             text = {
                 Column {
                     OutlinedTextField(
@@ -108,47 +73,12 @@ fun ShoppingListApp() {
                         onValueChange = { itemName = it },
                         singleLine = true,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    )
-
-                    OutlinedTextField(
-                        value = itemQuantity,
-                        onValueChange = { itemQuantity = it },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
+                            .fillMaxSize()
                             .padding(8.dp)
                     )
                 }
             }
         )
-
-
     }
 }
 
-@Composable
-fun ShoppingListItem(
-    item: ShoppingItem,
-    onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit
-    ){
-
-    Row(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxSize()
-            .border(
-                border = BorderStroke(2.dp, Color(0XFF018786)),
-                shape = RoundedCornerShape(20)
-            )
-    ) {
-
-        Text(text = item.name, modifier =Modifier.padding(8.dp))
-
-
-    }
-
-
-}
