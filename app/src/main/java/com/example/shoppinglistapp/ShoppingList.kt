@@ -31,13 +31,12 @@ data class ShoppingItem(
     val id: Int,
     var name: String,
     var quantity: Int,
-    var isEditing: Boolean,
+    var isEditing: Boolean = false,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShoppingListApp() {
-    val sItems by remember { mutableStateOf(listOf<ShoppingItem>()) }
+    var sItems by remember { mutableStateOf(listOf<ShoppingItem>()) }
     var showDialog by remember { mutableStateOf(false) }
     var itemName: String by remember { mutableStateOf("") }
     var itemQuantity by remember { mutableStateOf("") }
@@ -57,14 +56,44 @@ fun ShoppingListApp() {
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            items(sItems) { }
+            items(sItems) {
+                ShoppingListItem(it, {}, {},)
+            }
         }
     }
 
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            confirmButton = { /*TODO*/ },
+            confirmButton = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Button(onClick = {
+                        val newItem = ShoppingItem(
+                            id = sItems.size + 1,
+                            name = itemName,
+                            quantity = itemQuantity.toInt()
+                        )
+
+                        sItems += newItem
+                        showDialog = false
+                        itemName = ""
+                        itemQuantity = ""
+
+                    }) {
+                        Text(text = "add")
+                    }
+
+                    Button(onClick = { showDialog = false }) {
+                        Text(text = "Cancel")
+                    }
+                }
+            },
+
             title = { Text(text = "Add Shopping Item") },
             text = {
                 Column {
@@ -73,12 +102,45 @@ fun ShoppingListApp() {
                         onValueChange = { itemName = it },
                         singleLine = true,
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxWidth()
                             .padding(8.dp)
+                    )
+
+                    OutlinedTextField(
+                        value = itemQuantity,
+                        onValueChange = { itemQuantity = it },
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)
+
                     )
                 }
             }
         )
     }
 }
+
+@Composable
+fun ShoppingListItem(
+    item: ShoppingItem,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .border(
+                border = BorderStroke(2.dp, Color(0XFF018786)),
+                shape = RoundedCornerShape(20)
+            )
+    ) {
+        Text(text = item.name, modifier = Modifier.padding(8.dp))
+    }
+
+
+}
+
+
 
