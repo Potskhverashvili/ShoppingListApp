@@ -71,6 +71,7 @@ fun ShoppingListApp() {
                         .padding(8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+
                     Button(onClick = {
                         val newItem = ShoppingItem(
                             id = sItems.size + 1,
