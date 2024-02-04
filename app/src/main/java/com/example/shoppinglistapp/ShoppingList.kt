@@ -1,5 +1,4 @@
-package com.example.shoppinglistapp
-
+package com.example.shoppinglistapp2
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -57,7 +56,7 @@ fun ShoppingListApp() {
                 .padding(16.dp)
         ) {
             items(sItems) {
-                ShoppingListItem(it, {}, {},)
+                ShoppingListItem(it, {}, {})
             }
         }
     }
@@ -87,7 +86,6 @@ fun ShoppingListApp() {
                     }) {
                         Text(text = "add")
                     }
-
                     Button(onClick = { showDialog = false }) {
                         Text(text = "Cancel")
                     }
@@ -105,7 +103,6 @@ fun ShoppingListApp() {
                             .fillMaxWidth()
                             .padding(8.dp)
                     )
-
                     OutlinedTextField(
                         value = itemQuantity,
                         onValueChange = { itemQuantity = it },
@@ -113,7 +110,6 @@ fun ShoppingListApp() {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp)
-
                     )
                 }
             }
@@ -138,8 +134,6 @@ fun ShoppingListItem(
     ) {
         Text(text = item.name, modifier = Modifier.padding(8.dp))
     }
-
-
 }
 
 
