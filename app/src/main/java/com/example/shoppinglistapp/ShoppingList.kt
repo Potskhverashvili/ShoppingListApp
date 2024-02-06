@@ -61,7 +61,6 @@ fun ShoppingListApp() {
                 .padding(16.dp)
         ) {
             items(sItems) {
-
                 ShoppingListItem(it, {}, {})
             }
         }
